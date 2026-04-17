@@ -1,219 +1,219 @@
-/* hero3d.js — resn-style centered gem with mouse drag + chromatic aberration */
+/* hero3d.js — immersive-g style: soft off-white animated particle field */
 (function() {
 
-  // ── HERO CANVAS ──────────────────────────────────────────────────────────
-  const heroCanvas = document.getElementById('heroCanvas');
-  if (!heroCanvas || typeof THREE === 'undefined') return;
+   // — HERO CANVAS ————————————————————————————
+   const heroCanvas = document.getElementById('heroCanvas');
+    if (!heroCanvas) return;
 
-  const renderer = new THREE.WebGLRenderer({
-    canvas: heroCanvas,
-    antialias: true,
-    alpha: true
-  });
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.shadowMap.enabled = true;
+   const ctx = heroCanvas.getContext('2d');
+    let W, H;
 
-  const scene = new THREE.Scene();
-  const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-  camera.position.set(0, 0, 5);
+   function resize() {
+         W = heroCanvas.width = window.innerWidth;
+         H = heroCanvas.height = window.innerHeight;
+   }
+    resize();
+    window.addEventListener('resize', resize);
 
-  // Gem geometry — polyhedron like resn's diamond shape
-  function createGemGeometry() {
-    // Create a custom gem using icosahedron + some manual distortion
-    const geo = new THREE.IcosahedronGeometry(1.5, 1);
-    const pos = geo.attributes.position;
-    // Stretch vertically to make it more gem-like (taller)
-    for (let i = 0; i < pos.count; i++) {
-      const y = pos.getY(i);
-      pos.setY(i, y * 1.35);
-      // Slightly flatten bottom
-      if (y < -0.5) pos.setY(i, y * 0.7);
+   // Color palette inspired by immersive-g: off-white / warm light gray
+   const BG_COLOR = '#e8e8e8';
+    const PARTICLE_COLORS = [
+          'rgba(200,198,194,0.7)',
+          'rgba(180,178,172,0.5)',
+          'rgba(220,218,214,0.6)',
+          'rgba(160,158,154,0.4)',
+          'rgba(240,238,234,0.8)',
+        ];
+
+   // Noise helper (simplex-like using sin)
+   function noise(x, y, t) {
+         return (
+                 Math.sin(x * 0.8 + t * 0.3) *
+                 Math.cos(y * 0.6 + t * 0.2) +
+                 Math.sin(x * 0.3 - y * 0.5 + t * 0.15) * 0.5
+               );
+   }
+
+   // Particle class
+   class Particle {
+         constructor() { this.reset(true); }
+         reset(initial) {
+                 this.x = Math.random() * W;
+                 this.y = initial ? Math.random() * H : -20;
+                 this.baseX = this.x;
+                 this.baseY = this.y;
+                 this.size = 1.5 + Math.random() * 3.5;
+                 this.speed = 0.15 + Math.random() * 0.35;
+                 this.color = PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)];
+                 this.angle = Math.random() * Math.PI * 2;
+                 this.drift = (Math.random() - 0.5) * 0.6;
+                 this.life = 0;
+                 this.maxLife = 180 + Math.random() * 300;
+                 this.phase = Math.random() * Math.PI * 2;
+         }
+         update(t) {
+                 this.life++;
+                 const nx = noise(this.x * 0.004, this.y * 0.004, t);
+                 this.x += Math.cos(this.angle + nx * 2) * this.speed + this.drift * 0.3;
+                 this.y += this.speed * 0.6 + Math.sin(nx + this.phase) * 0.3;
+                 this.angle += 0.008;
+                 if (this.life > this.maxLife || this.y > H + 20 || this.x < -20 || this.x > W + 20) {
+                           this.reset(false);
+                 }
+         }
+         draw(ctx, t) {
+                 const alpha = Math.min(1, Math.sin((this.life / this.maxLife) * Math.PI)) ;
+                 ctx.save();
+                 ctx.globalAlpha = alpha * 0.85;
+                 ctx.fillStyle = this.color;
+                 ctx.beginPath();
+                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                 ctx.fill();
+                 ctx.restore();
+         }
+   }
+
+   // Flow lines
+   class FlowLine {
+         constructor() { this.reset(); }
+         reset() {
+                 this.x = Math.random() * W;
+                 this.y = Math.random() * H;
+                 this.points = [{x: this.x, y: this.y}];
+                 this.maxPoints = 40 + Math.floor(Math.random() * 60);
+                 this.speed = 0.5 + Math.random() * 1.2;
+                 this.life = 0;
+                 this.maxLife = 180 + Math.random() * 200;
+                 this.color = PARTICLE_COLORS[Math.floor(Math.random() * PARTICLE_COLORS.length)];
+                 this.width = 0.3 + Math.random() * 0.8;
+         }
+         update(t) {
+                 this.life++;
+                 const last = this.points[this.points.length - 1];
+                 const nx = noise(last.x * 0.003, last.y * 0.003, t);
+                 const angle = nx * Math.PI * 3;
+                 const newX = last.x + Math.cos(angle) * this.speed;
+                 const newY = last.y + Math.sin(angle) * this.speed;
+                 this.points.push({x: newX, y: newY});
+                 if (this.points.length > this.maxPoints) this.points.shift();
+                 if (this.life > this.maxLife || newX < -50 || newX > W + 50 || newY < -50 || newY > H + 50) {
+                           this.reset();
+                 }
+         }
+         draw(ctx) {
+                 if (this.points.length < 2) return;
+                 const alpha = Math.min(0.35, Math.sin((this.life / this.maxLife) * Math.PI) * 0.35);
+                 ctx.save();
+                 ctx.globalAlpha = alpha;
+                 ctx.strokeStyle = this.color;
+                 ctx.lineWidth = this.width;
+                 ctx.lineCap = 'round';
+                 ctx.lineJoin = 'round';
+                 ctx.beginPath();
+                 ctx.moveTo(this.points[0].x, this.points[0].y);
+                 for (let i = 1; i < this.points.length; i++) {
+                           ctx.lineTo(this.points[i].x, this.points[i].y);
+                 }
+                 ctx.stroke();
+                 ctx.restore();
+         }
+   }
+
+   // Init
+   const PARTICLE_COUNT = 120;
+    const FLOW_COUNT = 25;
+    const particles = Array.from({length: PARTICLE_COUNT}, () => new Particle());
+    const flowLines = Array.from({length: FLOW_COUNT}, () => new FlowLine());
+
+   // Mouse interaction
+   let mouse = {x: W / 2, y: H / 2};
+    heroCanvas.addEventListener('mousemove', e => {
+          mouse.x = e.clientX;
+          mouse.y = e.clientY;
+    });
+
+   let t = 0;
+    function animate() {
+          requestAnimationFrame(animate);
+          t += 0.008;
+
+      // Fill background
+      ctx.fillStyle = BG_COLOR;
+          ctx.fillRect(0, 0, W, H);
+
+      // Subtle radial gradient overlay at mouse position
+      const grad = ctx.createRadialGradient(mouse.x, mouse.y, 0, mouse.x, mouse.y, Math.max(W, H) * 0.6);
+          grad.addColorStop(0, 'rgba(250,249,245,0.18)');
+          grad.addColorStop(0.4, 'rgba(232,232,232,0.0)');
+          grad.addColorStop(1, 'rgba(200,198,194,0.12)');
+          ctx.fillStyle = grad;
+          ctx.fillRect(0, 0, W, H);
+
+      // Draw flow lines
+      flowLines.forEach(fl => { fl.update(t); fl.draw(ctx); });
+
+      // Draw particles
+      particles.forEach(p => { p.update(t); p.draw(ctx, t); });
+
+      // Subtle vignette
+      const vignette = ctx.createRadialGradient(W/2, H/2, H*0.3, W/2, H/2, H*0.85);
+          vignette.addColorStop(0, 'rgba(232,232,232,0)');
+          vignette.addColorStop(1, 'rgba(210,208,204,0.25)');
+          ctx.fillStyle = vignette;
+          ctx.fillRect(0, 0, W, H);
     }
-    pos.needsUpdate = true;
-    geo.computeVertexNormals();
-    return geo;
-  }
 
-  const gemGeo = createGemGeometry();
+   animate();
 
-  // Materials — dark glass with highlights, like resn
-  const gemMat = new THREE.MeshPhongMaterial({
-    color: 0x080810,
-    specular: 0x8888cc,
-    shininess: 120,
-    transparent: true,
-    opacity: 0.92,
-    side: THREE.DoubleSide,
-    flatShading: true,
-  });
+   // — MENU CANVAS (keep minimal - just dark bg) ———————————————
+   const menuCanvas = document.getElementById('menuCanvas');
+    if (!menuCanvas) return;
 
-  const gem = new THREE.Mesh(gemGeo, gemMat);
-  scene.add(gem);
-
-  // Wireframe overlay (subtle, like resn)
-  const wireGeo = createGemGeometry();
-  const wireMat = new THREE.MeshBasicMaterial({
-    color: 0x333348,
-    wireframe: true,
-    transparent: true,
-    opacity: 0.3,
-  });
-  const wire = new THREE.Mesh(wireGeo, wireMat);
-  scene.add(wire);
-
-  // Inner glow faces — coloured facets (resn has a blue/purple glint)
-  const innerGeo = new THREE.IcosahedronGeometry(1.0, 0);
-  const innerMat = new THREE.MeshPhongMaterial({
-    color: 0x1a0a3a,
-    specular: 0x6644aa,
-    shininess: 200,
-    transparent: true,
-    opacity: 0.7,
-    flatShading: true,
-    side: THREE.BackSide,
-  });
-  const inner = new THREE.Mesh(innerGeo, innerMat);
-  scene.add(inner);
-
-  // Lights
-  const ambientLight = new THREE.AmbientLight(0x111122, 0.5);
-  scene.add(ambientLight);
-
-  const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
-  keyLight.position.set(3, 5, 3);
-  scene.add(keyLight);
-
-  const fillLight = new THREE.DirectionalLight(0x2244aa, 0.6);
-  fillLight.position.set(-3, -2, 2);
-  scene.add(fillLight);
-
-  const rimLight = new THREE.DirectionalLight(0xffffff, 0.8);
-  rimLight.position.set(0, -3, -3);
-  scene.add(rimLight);
-
-  // Chromatic aberration effect via CSS filter on canvas
-  // We'll animate a slight glitch offset
-  let glitchTimer = 0;
-  function applyGlitch() {
-    glitchTimer += 0.01;
-    const glitchIntensity = Math.max(0, Math.sin(glitchTimer * 0.3) * 0.5 + 0.5);
-    const px = (Math.random() - 0.5) * 3 * glitchIntensity;
-    const py = (Math.random() - 0.5) * 1 * glitchIntensity;
-    if (Math.random() > 0.97) {
-      heroCanvas.style.filter = `drop-shadow(${px}px ${py}px 0 rgba(255,50,50,0.5)) drop-shadow(${-px}px ${-py}px 0 rgba(50,100,255,0.5))`;
-    } else if (Math.random() > 0.98) {
-      heroCanvas.style.filter = 'none';
+   const mCtx = menuCanvas.getContext('2d');
+    let mW, mH;
+    function mResize() {
+          mW = menuCanvas.width = window.innerWidth;
+          mH = menuCanvas.height = window.innerHeight;
     }
-  }
+    mResize();
+    window.addEventListener('resize', mResize);
 
-  // Mouse drag
-  let isDragging = false;
-  let prevMouse = { x: 0, y: 0 };
-  let rotVel = { x: 0, y: 0 };
+   // Minimal dark particles for menu overlay
+   class MenuParticle {
+         constructor() { this.reset(); }
+         reset() {
+                 this.x = Math.random() * mW;
+                 this.y = Math.random() * mH;
+                 this.size = 1 + Math.random() * 2;
+                 this.speed = 0.1 + Math.random() * 0.25;
+                 this.life = Math.random() * 200;
+                 this.maxLife = 200 + Math.random() * 200;
+         }
+         update() {
+                 this.life++;
+                 this.y -= this.speed;
+                 this.x += (Math.random() - 0.5) * 0.3;
+                 if (this.life > this.maxLife || this.y < 0) this.reset();
+         }
+         draw(ctx) {
+                 const alpha = Math.sin((this.life / this.maxLife) * Math.PI) * 0.4;
+                 ctx.save();
+                 ctx.globalAlpha = alpha;
+                 ctx.fillStyle = 'rgba(255,255,255,0.6)';
+                 ctx.beginPath();
+                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                 ctx.fill();
+                 ctx.restore();
+         }
+   }
 
-  window.addEventListener('mousedown', e => {
-    isDragging = true;
-    prevMouse = { x: e.clientX, y: e.clientY };
-  });
-  window.addEventListener('mouseup', () => { isDragging = false; });
-  window.addEventListener('mousemove', e => {
-    if (isDragging) {
-      const dx = e.clientX - prevMouse.x;
-      const dy = e.clientY - prevMouse.y;
-      rotVel.y += dx * 0.005;
-      rotVel.x += dy * 0.005;
-      prevMouse = { x: e.clientX, y: e.clientY };
-    }
-    // Custom cursor update
-    document.documentElement.style.setProperty('--cx', e.clientX + 'px');
-    document.documentElement.style.setProperty('--cy', e.clientY + 'px');
-  });
+   const menuParticles = Array.from({length: 60}, () => new MenuParticle());
 
-  // Resize
-  window.addEventListener('resize', () => {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    renderer.setSize(window.innerWidth, window.innerHeight);
-  });
-
-  // Animate
-  let autoRot = 0;
-  function animate() {
-    requestAnimationFrame(animate);
-
-    autoRot += 0.003;
-    rotVel.x *= 0.92;
-    rotVel.y *= 0.92;
-
-    gem.rotation.y = autoRot + rotVel.y;
-    gem.rotation.x = rotVel.x * 0.5;
-    wire.rotation.y = gem.rotation.y;
-    wire.rotation.x = gem.rotation.x;
-    inner.rotation.y = gem.rotation.y * 0.7;
-    inner.rotation.x = gem.rotation.x * 0.7;
-
-    applyGlitch();
-    renderer.render(scene, camera);
-  }
-  animate();
-
-
-  // ── MENU CANVAS ──────────────────────────────────────────────────────────
-  const menuCanvas = document.getElementById('menuCanvas');
-  if (!menuCanvas) return;
-
-  const mRenderer = new THREE.WebGLRenderer({ canvas: menuCanvas, antialias: true, alpha: true });
-  mRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-  mRenderer.setSize(window.innerWidth, window.innerHeight);
-
-  const mScene = new THREE.Scene();
-  const mCamera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
-  mCamera.position.set(0, 0, 5);
-
-  // Same gem but slightly different position for menu
-  const mGemGeo = createGemGeometry();
-  const mGemMat = new THREE.MeshPhongMaterial({
-    color: 0x060608,
-    specular: 0x5544aa,
-    shininess: 150,
-    transparent: true,
-    opacity: 0.85,
-    flatShading: true,
-    side: THREE.DoubleSide,
-  });
-  const mGem = new THREE.Mesh(mGemGeo, mGemMat);
-  mScene.add(mGem);
-
-  const mWire = new THREE.Mesh(createGemGeometry(), new THREE.MeshBasicMaterial({
-    color: 0x222233, wireframe: true, transparent: true, opacity: 0.25
-  }));
-  mScene.add(mWire);
-
-  mScene.add(new THREE.AmbientLight(0x111122, 0.5));
-  const mKey = new THREE.DirectionalLight(0xffffff, 0.8);
-  mKey.position.set(2, 4, 2);
-  mScene.add(mKey);
-  const mFill = new THREE.DirectionalLight(0x3355bb, 0.5);
-  mFill.position.set(-2, -2, 2);
-  mScene.add(mFill);
-
-  let mAutoRot = 0;
-  function animateMenu() {
-    requestAnimationFrame(animateMenu);
-    mAutoRot += 0.002;
-    mGem.rotation.y = mAutoRot;
-    mGem.rotation.x = Math.sin(mAutoRot * 0.5) * 0.2;
-    mWire.rotation.y = mGem.rotation.y;
-    mWire.rotation.x = mGem.rotation.x;
-    mRenderer.render(mScene, mCamera);
-  }
-  animateMenu();
-
-  window.addEventListener('resize', () => {
-    mCamera.aspect = window.innerWidth / window.innerHeight;
-    mCamera.updateProjectionMatrix();
-    mRenderer.setSize(window.innerWidth, window.innerHeight);
-  });
+   function animateMenu() {
+         requestAnimationFrame(animateMenu);
+         mCtx.clearRect(0, 0, mW, mH);
+         menuParticles.forEach(p => { p.update(); p.draw(mCtx); });
+   }
+    animateMenu();
 
 })();
