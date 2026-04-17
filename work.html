@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Work - Dinesh Sridharan</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="work-page">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+  <nav class="nav" id="mainNav">
+    <a href="index.html" class="nav-logo">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><polygon points="16,2 30,26 2,26" fill="none" stroke="white" stroke-width="1.5"/><polygon points="16,8 25,24 7,24" fill="white" opacity="0.15"/></svg>
+    </a>
+    <div class="nav-right">
+      <span class="nav-tagline">Selected Work</span>
+      <button class="nav-menu-btn" id="menuToggle" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="menu-overlay" id="menuOverlay">
+    <div class="menu-overlay-bg"></div>
+    <nav class="menu-nav">
+      <a href="index.html" class="menu-link" data-text="Home">Home</a>
+      <a href="work.html" class="menu-link active" data-text="Work">Work</a>
+      <a href="about.html" class="menu-link" data-text="About">About</a>
+      <a href="contact.html" class="menu-link" data-text="Contact">Contact</a>
+    </nav>
+    <div class="menu-footer">
+      <div class="menu-social">
+        <a href="https://linkedin.com/in/dineshsridharan" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://dribbble.com" target="_blank" rel="noopener">Dribbble</a>
+        <a href="mailto:hello@dineshsridharan.com">Email</a>
+      </div>
+      <p class="menu-footer-text">2026 Dinesh Sridharan</p>
+    </div>
+    <button class="menu-close" id="menuClose">X</button>
+  </div>
+  <section class="page-hero">
+    <canvas id="pageCanvas"></canvas>
+    <div class="page-hero-content">
+      <span class="section-label reveal">Portfolio</span>
+      <h1 class="page-title reveal"><span>Selected</span><br/><span class="accent-text">Work</span></h1>
+      <p class="page-subtitle reveal">Brand identities, product experiences, and AI-driven creative - a decade of craft.</p>
+    </div>
+  </section>
+  <div class="work-filter reveal">
+    <button class="filter-btn active" data-filter="all">All</button>
+    <button class="filter-btn" data-filter="brand">Brand Identity</button>
+    <button class="filter-btn" data-filter="product">Product Design</button>
+    <button class="filter-btn" data-filter="ai">AI Design</button>
+    <button class="filter-btn" data-filter="packaging">Packaging</button>
+  </div>
+  <section class="work-list">
+    <div class="work-item reveal" data-category="brand" id="apex">
+      <div class="work-item-num">01</div>
+      <div class="work-item-visual"><div class="work-placeholder" style="--c1:#1a1a2e;--c2:#0f3460;"><canvas class="mini-canvas" data-shape="pyramid"></canvas></div></div>
+      <div class="work-item-info">
+        <h2 class="work-title">Apex</h2>
+        <p class="work-subtitle">Brand Identity System</p>
+        <p class="work-desc">A comprehensive visual identity for a next-generation consulting firm. Built a full system spanning logo, typography, colour, motion, and digital guidelines across 200+ touchpoints.</p>
+        <div class="work-tags"><span>Brand Strategy</span><span>Visual Identity</span><span>Motion Design</span><span>Guidelines</span></div>
+        <div class="work-meta"><span>2024</span><span>6 months</span></div>
+        <a href="#" class="btn btn-ghost work-cta">View Case Study</a>
+      </div>
+    </div>
+    <div class="work-item work-item-reverse reveal" data-category="product" id="orbit">
+      <div class="work-item-num">02</div>
+      <div class="work-item-visual"><div class="work-placeholder" style="--c1:#0d0d0d;--c2:#1f1f3a;"><canvas class="mini-canvas" data-shape="sphere"></canvas></div></div>
+      <div class="work-item-info">
+        <h2 class="work-title">Orbit</h2>
+        <p class="work-subtitle">SaaS Product Design</p>
+        <p class="work-desc">End-to-end design for a B2B analytics platform. From zero-to-one product design, establishing a design system used across web and mobile apps serving 50,000+ users.</p>
+        <div class="work-tags"><span>Product Design</span><span>UX Research</span><span>Design System</span><span>Prototyping</span></div>
+        <div class="work-meta"><span>2024</span><span>12 months</span></div>
+        <a href="#" class="btn btn-ghost work-cta">View Case Study</a>
+      </div>
+    </div>
+    <div class="work-item reveal" data-category="packaging" id="ember">
+      <div class="work-item-num">03</div>
+      <div class="work-item-visual"><div class="work-placeholder" style="--c1:#1a0a0a;--c2:#3d1515;"><canvas class="mini-canvas" data-shape="box"></canvas></div></div>
+      <div class="work-item-info">
+        <h2 class="work-title">Ember</h2>
+        <p class="work-subtitle">Packaging and Brand Identity</p>
+        <p class="work-desc">Premium packaging design for a luxury skincare brand. Blending tactile craft with digital presentation across a 12-piece product line.</p>
+        <div class="work-tags"><span>Packaging Design</span><span>Brand Identity</span><span>Art Direction</span><span>Print Production</span></div>
+        <div class="work-meta"><span>2023</span><span>4 months</span></div>
+        <a href="#" class="btn btn-ghost work-cta">View Case Study</a>
+      </div>
+    </div>
+    <div class="work-item work-item-reverse reveal" data-category="ai" id="verdant">
+      <div class="work-item-num">04</div>
+      <div class="work-item-visual"><div class="work-placeholder" style="--c1:#0a1a0a;--c2:#1a3d1a;"><canvas class="mini-canvas" data-shape="hexagon"></canvas></div></div>
+      <div class="work-item-info">
+        <h2 class="work-title">Verdant</h2>
+        <p class="work-subtitle">AI-Augmented Brand Campaign</p>
+        <p class="work-desc">A first-of-its-kind brand campaign using AI image generation and creative AI workflows. Produced 500+ campaign assets in 3 weeks.</p>
+        <div class="work-tags"><span>AI Design</span><span>Campaign Direction</span><span>Midjourney</span><span>Brand Strategy</span></div>
+        <div class="work-meta"><span>2024</span><span>3 weeks</span></div>
+        <a href="#" class="btn btn-ghost work-cta">View Case Study</a>
+      </div>
+    </div>
+    <div class="work-item reveal" data-category="brand" id="nova">
+      <div class="work-item-num">05</div>
+      <div class="work-item-visual"><div class="work-placeholder" style="--c1:#1a1500;--c2:#3d3000;"><canvas class="mini-canvas" data-shape="torus"></canvas></div></div>
+      <div class="work-item-info">
+        <h2 class="work-title">Nova</h2>
+        <p class="work-subtitle">Fintech Brand Redesign</p>
+        <p class="work-desc">Complete rebrand of a Series B fintech, repositioning from startup to market leader with new visual identity and digital product design.</p>
+        <div class="work-tags"><span>Brand Redesign</span><span>Fintech</span><span>Digital Design</span><span>Strategy</span></div>
+        <div class="work-meta"><span>2023</span><span>8 months</span></div>
+        <a href="#" class="btn btn-ghost work-cta">View Case Study</a>
+      </div>
+    </div>
+    <div class="work-item work-item-reverse reveal" data-category="product" id="pulse">
+      <div class="work-item-num">06</div>
+      <div class="work-item-visual"><div class="work-placeholder" style="--c1:#0a0a1a;--c2:#1a1a3d;"><canvas class="mini-canvas" data-shape="diamond"></canvas></div></div>
+      <div class="work-item-info">
+        <h2 class="work-title">Pulse</h2>
+        <p class="work-subtitle">Health App - UX and Visual Design</p>
+        <p class="work-desc">A consumer health tracking app designed from research to launch, focused on reducing cognitive load and building daily engagement habits.</p>
+        <div class="work-tags"><span>App Design</span><span>User Research</span><span>Interaction Design</span><span>iOS - Android</span></div>
+        <div class="work-meta"><span>2022</span><span>9 months</span></div>
+        <a href="#" class="btn btn-ghost work-cta">View Case Study</a>
+      </div>
+    </div>
+  </section>
+  <section class="cta-section">
+    <div class="cta-inner">
+      <canvas id="ctaCanvas"></canvas>
+      <div class="cta-content">
+        <span class="section-label">Next Step</span>
+        <h2>Like what you see?</h2>
+        <p>Let us build something remarkable together.</p>
+        <a href="contact.html" class="btn btn-primary btn-large">Get in Touch</a>
+      </div>
+    </div>
+  </section>
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-left"><a href="index.html" class="footer-logo"><svg width="28" height="28" viewBox="0 0 32 32" fill="none"><polygon points="16,2 30,26 2,26" fill="none" stroke="white" stroke-width="1.5"/></svg><span>Dinesh Sridharan</span></a><p>Brand and Product Designer</p></div>
+      <div class="footer-nav"><a href="work.html">Work</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+      <div class="footer-right"><p>2026 Dinesh Sridharan. All rights reserved.</p></div>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/ScrollTrigger.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/work3d.js"></script>
+  <script src="js/animations.js"></script>
+</body>
+</html>
