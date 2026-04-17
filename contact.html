@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact - Dinesh Sridharan</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="contact-page">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+  <nav class="nav" id="mainNav">
+    <a href="index.html" class="nav-logo">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><polygon points="16,2 30,26 2,26" fill="none" stroke="white" stroke-width="1.5"/><polygon points="16,8 25,24 7,24" fill="white" opacity="0.15"/></svg>
+    </a>
+    <div class="nav-right">
+      <span class="nav-tagline">Get In Touch</span>
+      <button class="nav-menu-btn" id="menuToggle" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="menu-overlay" id="menuOverlay">
+    <div class="menu-overlay-bg"></div>
+    <nav class="menu-nav">
+      <a href="index.html" class="menu-link" data-text="Home">Home</a>
+      <a href="work.html" class="menu-link" data-text="Work">Work</a>
+      <a href="about.html" class="menu-link" data-text="About">About</a>
+      <a href="contact.html" class="menu-link active" data-text="Contact">Contact</a>
+    </nav>
+    <div class="menu-footer">
+      <div class="menu-social">
+        <a href="https://linkedin.com/in/dineshsridharan" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://dribbble.com" target="_blank" rel="noopener">Dribbble</a>
+        <a href="mailto:hello@dineshsridharan.com">Email</a>
+      </div>
+      <p class="menu-footer-text">2026 Dinesh Sridharan</p>
+    </div>
+    <button class="menu-close" id="menuClose">X</button>
+  </div>
+  <section class="contact-hero page-hero">
+    <canvas id="pageCanvas"></canvas>
+    <div class="contact-hero-content page-hero-content">
+      <span class="section-label reveal">Contact</span>
+      <h1 class="page-title reveal"><span>Lets make</span><br/><span class="accent-text">something</span><br/><span>great.</span></h1>
+    </div>
+  </section>
+  <section class="contact-body">
+    <div class="contact-inner">
+      <div class="contact-left reveal">
+        <div class="contact-info">
+          <div class="contact-block">
+            <span class="contact-label">Email</span>
+            <a href="mailto:hello@dineshsridharan.com" class="contact-value contact-email">hello@dineshsridharan.com</a>
+          </div>
+          <div class="contact-block">
+            <span class="contact-label">LinkedIn</span>
+            <a href="https://linkedin.com/in/dineshsridharan" target="_blank" rel="noopener" class="contact-value">linkedin.com/in/dineshsridharan</a>
+          </div>
+          <div class="contact-block">
+            <span class="contact-label">Based In</span>
+            <span class="contact-value">India - Available Worldwide</span>
+          </div>
+          <div class="contact-block">
+            <span class="contact-label">Availability</span>
+            <span class="contact-value availability-badge">
+              <span class="availability-dot"></span>
+              Available for Projects
+            </span>
+          </div>
+        </div>
+        <div class="contact-social">
+          <a href="https://linkedin.com/in/dineshsridharan" target="_blank" rel="noopener" class="social-link">LinkedIn</a>
+          <a href="https://dribbble.com" target="_blank" rel="noopener" class="social-link">Dribbble</a>
+          <a href="https://behance.net" target="_blank" rel="noopener" class="social-link">Behance</a>
+        </div>
+      </div>
+      <div class="contact-right reveal">
+        <form class="contact-form" id="contactForm" novalidate>
+          <div class="form-group">
+            <label for="name">Your Name</label>
+            <input type="text" id="name" name="name" placeholder="John Smith" required />
+            <span class="form-line"></span>
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" name="email" placeholder="john@company.com" required />
+            <span class="form-line"></span>
+          </div>
+          <div class="form-group">
+            <label for="project">Project Type</label>
+            <select id="project" name="project">
+              <option value="">Select a service...</option>
+              <option value="brand">Brand Identity</option>
+              <option value="product">Product Design</option>
+              <option value="ai">AI-Augmented Design</option>
+              <option value="direction">Creative Direction</option>
+              <option value="other">Other</option>
+            </select>
+            <span class="form-line"></span>
+          </div>
+          <div class="form-group">
+            <label for="budget">Budget Range</label>
+            <select id="budget" name="budget">
+              <option value="">Select budget...</option>
+              <option value="5-10k">5000 to 10000</option>
+              <option value="10-25k">10000 to 25000</option>
+              <option value="25-50k">25000 to 50000</option>
+              <option value="50k+">50000 plus</option>
+            </select>
+            <span class="form-line"></span>
+          </div>
+          <div class="form-group form-group-full">
+            <label for="message">Tell me about your project</label>
+            <textarea id="message" name="message" rows="5" placeholder="Describe your project, goals, and timeline..." required></textarea>
+            <span class="form-line"></span>
+          </div>
+          <button type="submit" class="btn btn-primary btn-large form-submit">
+            <span class="btn-text">Send Message</span>
+            <span class="btn-arrow">-&gt;</span>
+          </button>
+          <div class="form-success" id="formSuccess" style="display:none;">
+            Message sent! I will be in touch within 24 hours.
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-left"><a href="index.html" class="footer-logo"><svg width="28" height="28" viewBox="0 0 32 32" fill="none"><polygon points="16,2 30,26 2,26" fill="none" stroke="white" stroke-width="1.5"/></svg><span>Dinesh Sridharan</span></a><p>Brand and Product Designer</p></div>
+      <div class="footer-nav"><a href="work.html">Work</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+      <div class="footer-right"><p>2026 Dinesh Sridharan. All rights reserved.</p></div>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/ScrollTrigger.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/contact3d.js"></script>
+  <script src="js/animations.js"></script>
+</body>
+</html>
