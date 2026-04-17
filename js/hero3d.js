@@ -1,78 +1,219 @@
-(function(){
-if(typeof THREE==='undefined')return;
-const heroCanvas=document.getElementById('heroCanvas');
-if(heroCanvas){
-const scene=new THREE.Scene();
-const camera=new THREE.PerspectiveCamera(45,window.innerWidth/window.innerHeight,0.1,100);
-camera.position.set(0,0,6);
-const renderer=new THREE.WebGLRenderer({canvas:heroCanvas,antialias:true,alpha:true});
-renderer.setSize(window.innerWidth,window.innerHeight);
-renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
-renderer.setClearColor(0x000000,0);
-const detail=1;
-const geometry=new THREE.IcosahedronGeometry(2,detail);
-const wireGeo=new THREE.IcosahedronGeometry(2.01,detail);
-const wireMat=new THREE.MeshBasicMaterial({color:0xffffff,wireframe:true,transparent:true,opacity:0.06});
-const wireMesh=new THREE.Mesh(wireGeo,wireMat);
-scene.add(wireMesh);
-const gemMat=new THREE.MeshPhongMaterial({color:0x111122,specular:0xffffff,shininess:200,transparent:true,opacity:0.75,flatShading:true});
-const gemMesh=new THREE.Mesh(geometry,gemMat);
-gemMesh.position.set(2,-0.5,0);
-scene.add(gemMesh);
-wireMesh.position.copy(gemMesh.position);
-scene.add(new THREE.AmbientLight(0xffffff,0.15));
-const pl1=new THREE.PointLight(0xffffff,2,20);pl1.position.set(5,5,5);scene.add(pl1);
-const pl2=new THREE.PointLight(0x4444ff,1.5,20);pl2.position.set(-5,-2,3);scene.add(pl2);
-const pl3=new THREE.PointLight(0xff2244,0.8,15);pl3.position.set(2,-5,2);scene.add(pl3);
-const pCount=600;const pPos=new Float32Array(pCount*3);
-for(let i=0;i<pCount;i++){pPos[i*3]=(Math.random()-.5)*20;pPos[i*3+1]=(Math.random()-.5)*20;pPos[i*3+2]=(Math.random()-.5)*20;}
-const pGeo=new THREE.BufferGeometry();pGeo.setAttribute('position',new THREE.BufferAttribute(pPos,3));
-const pMat=new THREE.PointsMaterial({color:0xffffff,size:0.04,transparent:true,opacity:0.35});
-const particles=new THREE.Points(pGeo,pMat);scene.add(particles);
-let targetRotX=0,targetRotY=0,currentRotX=0,currentRotY=0,isDragging=false,lastMouseX=0,lastMouseY=0;
-document.addEventListener('mousemove',(e)=>{if(isDragging){targetRotY+=(e.clientX-lastMouseX)*.008;targetRotX+=(e.clientY-lastMouseY)*.008;lastMouseX=e.clientX;lastMouseY=e.clientY;}else{targetRotY=(e.clientX/window.innerWidth-.5)*.8;targetRotX=(e.clientY/window.innerHeight-.5)*.4;}});
-heroCanvas.addEventListener('mousedown',(e)=>{isDragging=true;lastMouseX=e.clientX;lastMouseY=e.clientY;});
-document.addEventListener('mouseup',()=>{isDragging=false;});
-let autoRotate=0;
-(function animate(){requestAnimationFrame(animate);autoRotate+=.003;currentRotX+=(targetRotX-currentRotX)*.06;currentRotY+=(targetRotY-currentRotY)*.06;gemMesh.rotation.x=currentRotX*.5;gemMesh.rotation.y=autoRotate+currentRotY;gemMesh.rotation.z=Math.sin(autoRotate*.5)*.1;wireMesh.rotation.copy(gemMesh.rotation);particles.rotation.y=autoRotate*.1;particles.rotation.x=autoRotate*.05;pl1.position.x=Math.sin(autoRotate*.7)*6;pl1.position.y=Math.cos(autoRotate*.5)*4;pl2.position.x=Math.cos(autoRotate*.4)*-5;renderer.render(scene,camera);})();
-window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);});
-}
-document.querySelectorAll('.mini-canvas').forEach(canvas=>{
-const shape=canvas.dataset.shape||'sphere';const parent=canvas.parentElement;
-const w=parent.offsetWidth||400;const h=parent.offsetHeight||340;
-const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(50,w/h,0.1,100);camera.position.z=3.5;
-const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
-renderer.setSize(w,h);renderer.setPixelRatio(Math.min(window.devicePixelRatio,1.5));renderer.setClearColor(0x000000,0);
-let geo;
-if(shape==='pyramid')geo=new THREE.ConeGeometry(1,1.8,4);
-else if(shape==='sphere')geo=new THREE.IcosahedronGeometry(1.2,1);
-else if(shape==='box')geo=new THREE.BoxGeometry(1.5,1.5,1.5);
-else if(shape==='hexagon')geo=new THREE.CylinderGeometry(1.2,1.2,.3,6);
-else if(shape==='torus')geo=new THREE.TorusGeometry(1,.35,8,24);
-else if(shape==='diamond')geo=new THREE.OctahedronGeometry(1.3,0);
-else geo=new THREE.IcosahedronGeometry(1.2,0);
-const mat=new THREE.MeshPhongMaterial({color:0x222233,specular:0xffffff,shininess:180,flatShading:true,transparent:true,opacity:.7});
-const mesh=new THREE.Mesh(geo,mat);scene.add(mesh);
-const wMat=new THREE.MeshBasicMaterial({color:0xffffff,wireframe:true,transparent:true,opacity:.08});
-scene.add(new THREE.Mesh(geo.clone(),wMat));
-scene.add(new THREE.AmbientLight(0xffffff,.2));
-const pl=new THREE.PointLight(0xffffff,3,15);pl.position.set(3,3,3);scene.add(pl);
-const pl2=new THREE.PointLight(0x3344ff,1.5,10);pl2.position.set(-3,-1,2);scene.add(pl2);
-let t=Math.random()*Math.PI*2;
-(function animate(){requestAnimationFrame(animate);t+=.01;mesh.rotation.y=t*.5;mesh.rotation.x=Math.sin(t*.3)*.3;renderer.render(scene,camera);})();
-});
-const ctaCanvas=document.getElementById('ctaCanvas');
-if(ctaCanvas){
-const parent=ctaCanvas.parentElement;const w=parent.offsetWidth;const h=parent.offsetHeight||500;
-const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(60,w/h,0.1,100);camera.position.z=5;
-const renderer=new THREE.WebGLRenderer({canvas:ctaCanvas,antialias:true,alpha:true});
-renderer.setSize(w,h);renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));renderer.setClearColor(0x000000,0);
-const meshes=[];
-for(let i=0;i<12;i++){
-const geo=[new THREE.IcosahedronGeometry(.3+Math.random()*.4,0),new THREE.OctahedronGeometry(.3+Math.random()*.4,0),new THREE.TetrahedronGeometry(.3+Math.random()*.4,0)][Math.floor(Math.random()*3)];
-const mat=new THREE.MeshPhongMaterial({color:0x1a1a2e,specular:0xffffff,shininess:150,flatShading:true,transparent:true,opacity:.5+Math.random()*.4});
-const m=new THREE.Mesh(geo,mat);m.position.set((Math.random()-.5)*14,(Math.random()-.5)*8,(Math.random()-.5)*6);m.userData.speed=.003+Math.random()*.01;m.userData.offset=Math.random()*Math.PI*2;scene.add(m);meshes.push(m);}
-scene.add(new THREE.AmbientLight(0xffffff,.3));const pl=new THREE.PointLight(0xffffff,2,30);pl.position.set(0,5,5);scene.add(pl);
-let t2=0;(function animate(){requestAnimationFrame(animate);t2+=.008;meshes.forEach(m=>{m.rotation.x+=m.userData.speed;m.rotation.y+=m.userData.speed*.7;m.position.y+=Math.sin(t2+m.userData.offset)*.004;});renderer.render(scene,camera);})();
-}
+/* hero3d.js — resn-style centered gem with mouse drag + chromatic aberration */
+(function() {
+
+  // ── HERO CANVAS ──────────────────────────────────────────────────────────
+  const heroCanvas = document.getElementById('heroCanvas');
+  if (!heroCanvas || typeof THREE === 'undefined') return;
+
+  const renderer = new THREE.WebGLRenderer({
+    canvas: heroCanvas,
+    antialias: true,
+    alpha: true
+  });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderer.shadowMap.enabled = true;
+
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+  camera.position.set(0, 0, 5);
+
+  // Gem geometry — polyhedron like resn's diamond shape
+  function createGemGeometry() {
+    // Create a custom gem using icosahedron + some manual distortion
+    const geo = new THREE.IcosahedronGeometry(1.5, 1);
+    const pos = geo.attributes.position;
+    // Stretch vertically to make it more gem-like (taller)
+    for (let i = 0; i < pos.count; i++) {
+      const y = pos.getY(i);
+      pos.setY(i, y * 1.35);
+      // Slightly flatten bottom
+      if (y < -0.5) pos.setY(i, y * 0.7);
+    }
+    pos.needsUpdate = true;
+    geo.computeVertexNormals();
+    return geo;
+  }
+
+  const gemGeo = createGemGeometry();
+
+  // Materials — dark glass with highlights, like resn
+  const gemMat = new THREE.MeshPhongMaterial({
+    color: 0x080810,
+    specular: 0x8888cc,
+    shininess: 120,
+    transparent: true,
+    opacity: 0.92,
+    side: THREE.DoubleSide,
+    flatShading: true,
+  });
+
+  const gem = new THREE.Mesh(gemGeo, gemMat);
+  scene.add(gem);
+
+  // Wireframe overlay (subtle, like resn)
+  const wireGeo = createGemGeometry();
+  const wireMat = new THREE.MeshBasicMaterial({
+    color: 0x333348,
+    wireframe: true,
+    transparent: true,
+    opacity: 0.3,
+  });
+  const wire = new THREE.Mesh(wireGeo, wireMat);
+  scene.add(wire);
+
+  // Inner glow faces — coloured facets (resn has a blue/purple glint)
+  const innerGeo = new THREE.IcosahedronGeometry(1.0, 0);
+  const innerMat = new THREE.MeshPhongMaterial({
+    color: 0x1a0a3a,
+    specular: 0x6644aa,
+    shininess: 200,
+    transparent: true,
+    opacity: 0.7,
+    flatShading: true,
+    side: THREE.BackSide,
+  });
+  const inner = new THREE.Mesh(innerGeo, innerMat);
+  scene.add(inner);
+
+  // Lights
+  const ambientLight = new THREE.AmbientLight(0x111122, 0.5);
+  scene.add(ambientLight);
+
+  const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
+  keyLight.position.set(3, 5, 3);
+  scene.add(keyLight);
+
+  const fillLight = new THREE.DirectionalLight(0x2244aa, 0.6);
+  fillLight.position.set(-3, -2, 2);
+  scene.add(fillLight);
+
+  const rimLight = new THREE.DirectionalLight(0xffffff, 0.8);
+  rimLight.position.set(0, -3, -3);
+  scene.add(rimLight);
+
+  // Chromatic aberration effect via CSS filter on canvas
+  // We'll animate a slight glitch offset
+  let glitchTimer = 0;
+  function applyGlitch() {
+    glitchTimer += 0.01;
+    const glitchIntensity = Math.max(0, Math.sin(glitchTimer * 0.3) * 0.5 + 0.5);
+    const px = (Math.random() - 0.5) * 3 * glitchIntensity;
+    const py = (Math.random() - 0.5) * 1 * glitchIntensity;
+    if (Math.random() > 0.97) {
+      heroCanvas.style.filter = `drop-shadow(${px}px ${py}px 0 rgba(255,50,50,0.5)) drop-shadow(${-px}px ${-py}px 0 rgba(50,100,255,0.5))`;
+    } else if (Math.random() > 0.98) {
+      heroCanvas.style.filter = 'none';
+    }
+  }
+
+  // Mouse drag
+  let isDragging = false;
+  let prevMouse = { x: 0, y: 0 };
+  let rotVel = { x: 0, y: 0 };
+
+  window.addEventListener('mousedown', e => {
+    isDragging = true;
+    prevMouse = { x: e.clientX, y: e.clientY };
+  });
+  window.addEventListener('mouseup', () => { isDragging = false; });
+  window.addEventListener('mousemove', e => {
+    if (isDragging) {
+      const dx = e.clientX - prevMouse.x;
+      const dy = e.clientY - prevMouse.y;
+      rotVel.y += dx * 0.005;
+      rotVel.x += dy * 0.005;
+      prevMouse = { x: e.clientX, y: e.clientY };
+    }
+    // Custom cursor update
+    document.documentElement.style.setProperty('--cx', e.clientX + 'px');
+    document.documentElement.style.setProperty('--cy', e.clientY + 'px');
+  });
+
+  // Resize
+  window.addEventListener('resize', () => {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
+  // Animate
+  let autoRot = 0;
+  function animate() {
+    requestAnimationFrame(animate);
+
+    autoRot += 0.003;
+    rotVel.x *= 0.92;
+    rotVel.y *= 0.92;
+
+    gem.rotation.y = autoRot + rotVel.y;
+    gem.rotation.x = rotVel.x * 0.5;
+    wire.rotation.y = gem.rotation.y;
+    wire.rotation.x = gem.rotation.x;
+    inner.rotation.y = gem.rotation.y * 0.7;
+    inner.rotation.x = gem.rotation.x * 0.7;
+
+    applyGlitch();
+    renderer.render(scene, camera);
+  }
+  animate();
+
+
+  // ── MENU CANVAS ──────────────────────────────────────────────────────────
+  const menuCanvas = document.getElementById('menuCanvas');
+  if (!menuCanvas) return;
+
+  const mRenderer = new THREE.WebGLRenderer({ canvas: menuCanvas, antialias: true, alpha: true });
+  mRenderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  mRenderer.setSize(window.innerWidth, window.innerHeight);
+
+  const mScene = new THREE.Scene();
+  const mCamera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+  mCamera.position.set(0, 0, 5);
+
+  // Same gem but slightly different position for menu
+  const mGemGeo = createGemGeometry();
+  const mGemMat = new THREE.MeshPhongMaterial({
+    color: 0x060608,
+    specular: 0x5544aa,
+    shininess: 150,
+    transparent: true,
+    opacity: 0.85,
+    flatShading: true,
+    side: THREE.DoubleSide,
+  });
+  const mGem = new THREE.Mesh(mGemGeo, mGemMat);
+  mScene.add(mGem);
+
+  const mWire = new THREE.Mesh(createGemGeometry(), new THREE.MeshBasicMaterial({
+    color: 0x222233, wireframe: true, transparent: true, opacity: 0.25
+  }));
+  mScene.add(mWire);
+
+  mScene.add(new THREE.AmbientLight(0x111122, 0.5));
+  const mKey = new THREE.DirectionalLight(0xffffff, 0.8);
+  mKey.position.set(2, 4, 2);
+  mScene.add(mKey);
+  const mFill = new THREE.DirectionalLight(0x3355bb, 0.5);
+  mFill.position.set(-2, -2, 2);
+  mScene.add(mFill);
+
+  let mAutoRot = 0;
+  function animateMenu() {
+    requestAnimationFrame(animateMenu);
+    mAutoRot += 0.002;
+    mGem.rotation.y = mAutoRot;
+    mGem.rotation.x = Math.sin(mAutoRot * 0.5) * 0.2;
+    mWire.rotation.y = mGem.rotation.y;
+    mWire.rotation.x = mGem.rotation.x;
+    mRenderer.render(mScene, mCamera);
+  }
+  animateMenu();
+
+  window.addEventListener('resize', () => {
+    mCamera.aspect = window.innerWidth / window.innerHeight;
+    mCamera.updateProjectionMatrix();
+    mRenderer.setSize(window.innerWidth, window.innerHeight);
+  });
+
 })();
