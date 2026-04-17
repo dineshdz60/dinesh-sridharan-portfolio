@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>About - Dinesh Sridharan</title>
+  <link rel="stylesheet" href="css/style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100;200;300;400;500;600&family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="about-page">
+  <div class="cursor" id="cursor"></div>
+  <div class="cursor-follower" id="cursorFollower"></div>
+  <nav class="nav" id="mainNav">
+    <a href="index.html" class="nav-logo">
+      <svg width="32" height="32" viewBox="0 0 32 32" fill="none"><polygon points="16,2 30,26 2,26" fill="none" stroke="white" stroke-width="1.5"/><polygon points="16,8 25,24 7,24" fill="white" opacity="0.15"/></svg>
+    </a>
+    <div class="nav-right">
+      <span class="nav-tagline">About Me</span>
+      <button class="nav-menu-btn" id="menuToggle" aria-label="Open menu"><span></span><span></span><span></span></button>
+    </div>
+  </nav>
+  <div class="menu-overlay" id="menuOverlay">
+    <div class="menu-overlay-bg"></div>
+    <nav class="menu-nav">
+      <a href="index.html" class="menu-link" data-text="Home">Home</a>
+      <a href="work.html" class="menu-link" data-text="Work">Work</a>
+      <a href="about.html" class="menu-link active" data-text="About">About</a>
+      <a href="contact.html" class="menu-link" data-text="Contact">Contact</a>
+    </nav>
+    <div class="menu-footer">
+      <div class="menu-social">
+        <a href="https://linkedin.com/in/dineshsridharan" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://dribbble.com" target="_blank" rel="noopener">Dribbble</a>
+        <a href="mailto:hello@dineshsridharan.com">Email</a>
+      </div>
+      <p class="menu-footer-text">2026 Dinesh Sridharan</p>
+    </div>
+    <button class="menu-close" id="menuClose">X</button>
+  </div>
+  <section class="page-hero about-hero">
+    <canvas id="pageCanvas"></canvas>
+    <div class="page-hero-content">
+      <span class="section-label reveal">The Designer</span>
+      <h1 class="page-title reveal"><span>Dinesh</span><br/><span class="accent-text">Sridharan</span></h1>
+    </div>
+  </section>
+  <section class="about-intro reveal">
+    <div class="about-intro-inner">
+      <div class="about-intro-left">
+        <div class="about-portrait">
+          <div class="portrait-placeholder">
+            <canvas id="portraitCanvas"></canvas>
+            <div class="portrait-text">DS</div>
+          </div>
+          <div class="portrait-ring"></div>
+        </div>
+      </div>
+      <div class="about-intro-right">
+        <h2 class="about-h2">I design for impact. Not just aesthetics.</h2>
+        <p>With over a decade in brand and product design, I have learned that great design is never about decoration, it is about clarity, emotion, and trust. I work at the intersection of strategy and craft, building systems that help brands communicate with confidence.</p>
+        <p>Today, I supercharge that experience with AI, using tools like Midjourney, Runway, and custom LLM pipelines to generate concepts faster, iterate deeper, and deliver more value than a traditional design process ever could.</p>
+        <p>I have worked with startups, scale-ups, and established brands across technology, finance, health, and consumer goods.</p>
+        <a href="contact.html" class="btn btn-primary">Work With Me</a>
+      </div>
+    </div>
+  </section>
+  <section class="philosophy reveal">
+    <div class="philosophy-inner">
+      <span class="section-label">Design Philosophy</span>
+      <div class="philosophy-grid">
+        <div class="philosophy-item">
+          <div class="philo-icon"><svg viewBox="0 0 60 60"><polygon points="30,5 55,47 5,47" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+          <h3>Systems First</h3>
+          <p>I do not design one-offs. I build scalable, consistent, and adaptable frameworks that work across every touchpoint.</p>
+        </div>
+        <div class="philosophy-item">
+          <div class="philo-icon"><svg viewBox="0 0 60 60"><circle cx="30" cy="30" r="22" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+          <h3>Strategy-Led</h3>
+          <p>Every design decision is rooted in business objectives and user insight. Beautiful work that does not solve a problem is decoration.</p>
+        </div>
+        <div class="philosophy-item">
+          <div class="philo-icon"><svg viewBox="0 0 60 60"><rect x="10" y="10" width="40" height="40" rx="3" fill="none" stroke="currentColor" stroke-width="1.5" transform="rotate(10 30 30)"/></svg></div>
+          <h3>AI as a Tool</h3>
+          <p>I was an early adopter of AI design tools, not as a shortcut, but as a creative superpower that lets me explore more and deliver better work.</p>
+        </div>
+        <div class="philosophy-item">
+          <div class="philo-icon"><svg viewBox="0 0 60 60"><polygon points="30,8 52,22 52,38 30,52 8,38 8,22" fill="none" stroke="currentColor" stroke-width="1.5"/></svg></div>
+          <h3>Craft Matters</h3>
+          <p>Pixel precision, typographic nuance, colour science, the details are where trust is built and lasting impressions are made.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="experience reveal">
+    <div class="experience-inner">
+      <span class="section-label">Experience</span>
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-year">2021 - Present</div>
+          <div class="timeline-content">
+            <h3>Senior Brand and Product Designer</h3>
+            <p class="timeline-company">Independent / Freelance</p>
+            <p>Leading brand identity, product design, and AI-augmented creative for clients across tech, fintech, health, and consumer sectors globally.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2018 - 2021</div>
+          <div class="timeline-content">
+            <h3>Lead Brand Designer</h3>
+            <p class="timeline-company">Design Studio, India</p>
+            <p>Led brand strategy and identity for 20+ clients. Built and managed a team of 6 designers. Introduced systematic design processes and component-based workflows.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2015 - 2018</div>
+          <div class="timeline-content">
+            <h3>Senior Product Designer</h3>
+            <p class="timeline-company">Tech Startup, Bangalore</p>
+            <p>End-to-end UX and visual design for a Series A SaaS product. Grew the user base from 0 to 100k with design-led product improvements.</p>
+          </div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-year">2013 - 2015</div>
+          <div class="timeline-content">
+            <h3>UI / Visual Designer</h3>
+            <p class="timeline-company">Agency, Chennai</p>
+            <p>Began career in digital and print design, advertising, web, and brand collateral for FMCG and retail clients.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="skills reveal">
+    <div class="skills-inner">
+      <span class="section-label">Capabilities</span>
+      <div class="skills-grid">
+        <div class="skill-group">
+          <h4>Brand Design</h4>
+          <ul>
+            <li>Brand Strategy and Positioning</li><li>Logo and Visual Identity</li><li>Design Systems</li><li>Typography and Colour</li><li>Brand Guidelines</li><li>Packaging Design</li>
+          </ul>
+        </div>
+        <div class="skill-group">
+          <h4>Product Design</h4>
+          <ul>
+            <li>UX Research and Strategy</li><li>Wireframing and Prototyping</li><li>UI Design</li><li>Interaction Design</li><li>Component Libraries</li><li>Usability Testing</li>
+          </ul>
+        </div>
+        <div class="skill-group">
+          <h4>AI and Tools</h4>
+          <ul>
+            <li>Midjourney / Stable Diffusion</li><li>Runway ML</li><li>ChatGPT / Claude Workflows</li><li>Figma (Expert)</li><li>Adobe CC Suite</li><li>Framer / Webflow</li>
+          </ul>
+        </div>
+        <div class="skill-group">
+          <h4>Direction</h4>
+          <ul>
+            <li>Creative Direction</li><li>Art Direction</li><li>Campaign Strategy</li><li>Client Presentation</li><li>Team Leadership</li><li>Project Management</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="cta-section">
+    <div class="cta-inner">
+      <canvas id="ctaCanvas"></canvas>
+      <div class="cta-content">
+        <span class="section-label">Lets Talk</span>
+        <h2>Ready to build something together?</h2>
+        <p>Available for brand, product, and AI design projects.</p>
+        <a href="contact.html" class="btn btn-primary btn-large">Start a Conversation</a>
+      </div>
+    </div>
+  </section>
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-left"><a href="index.html" class="footer-logo"><svg width="28" height="28" viewBox="0 0 32 32" fill="none"><polygon points="16,2 30,26 2,26" fill="none" stroke="white" stroke-width="1.5"/></svg><span>Dinesh Sridharan</span></a><p>Brand and Product Designer</p></div>
+      <div class="footer-nav"><a href="work.html">Work</a><a href="about.html">About</a><a href="contact.html">Contact</a></div>
+      <div class="footer-right"><p>2026 Dinesh Sridharan. All rights reserved.</p></div>
+    </div>
+  </footer>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.158.0/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.2/dist/ScrollTrigger.min.js"></script>
+  <script src="js/main.js"></script>
+  <script src="js/about3d.js"></script>
+  <script src="js/animations.js"></script>
+</body>
+</html>
